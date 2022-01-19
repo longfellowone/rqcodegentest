@@ -1,6 +1,5 @@
 query Projects {
   projects {
-    id
-    project
+    ...ProjectDetails
   }
 }

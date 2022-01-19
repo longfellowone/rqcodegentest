@@ -43,20 +43,26 @@ export type QueryRoot = {
   projects: Array<Project>;
 };
 
+export type ProjectDetailsFragment = { __typename?: 'Project', id: number, project: string };
+
 export type ProjectsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type ProjectsQuery = { __typename?: 'QueryRoot', projects: Array<{ __typename?: 'Project', id: number, project: string }> };
 
-
+export const ProjectDetailsFragmentDoc = /*#__PURE__*/ `
+    fragment ProjectDetails on Project {
+  id
+  project
+}
+    `;
 export const ProjectsDocument = /*#__PURE__*/ `
     query Projects {
   projects {
-    id
-    project
+    ...ProjectDetails
   }
 }
-    `;
+    ${ProjectDetailsFragmentDoc}`;
 export const useProjectsQuery = <
       TData = ProjectsQuery,
       TError = unknown

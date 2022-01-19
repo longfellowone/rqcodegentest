@@ -1,8 +1,9 @@
 import type { GetServerSideProps, NextPage } from "next";
-import { dehydrate, QueryClient, useQuery } from "react-query";
+import { dehydrate, QueryClient } from "react-query";
+import ProjectDetail from "../components/ProjectDetail";
 import { ProjectsQuery, useProjectsQuery } from "../generated/graphql";
 
-// For setup
+// For config and tailwind setup
 // https://github.com/longfellowone/cloud-client
 
 const Home: NextPage = () => {
@@ -12,8 +13,15 @@ const Home: NextPage = () => {
 
   if (isError) return <div>Something went wrong.</div>;
 
-  return <div>{JSON.stringify(data, null, 2)}</div>;
+  return (
+    <div>
+      {data?.projects.map((project) => (
+        <ProjectDetail key={project.id} project={project} />
+      ))}
+    </div>
+  );
 };
+``;
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const queryClient = new QueryClient();
