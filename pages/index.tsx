@@ -7,7 +7,8 @@ import { ProjectsQuery, useProjectsQuery } from '../generated/graphql'
 // https://github.com/longfellowone/cloud-client
 
 const Home: NextPage = () => {
-  const { isLoading, isError, data } = useProjectsQuery()
+  const refetchInterval = { refetchInterval: 1000 }
+  const { isLoading, isError, data } = useProjectsQuery({}, refetchInterval)
 
   if (isLoading) return <div>Loading...</div>
 

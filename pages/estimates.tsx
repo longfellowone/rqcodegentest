@@ -18,7 +18,7 @@ const Home: NextPage = () => {
     <div>
       <div>Project Total: {totalCost}</div>
       {data?.estimate.estimateAssemblies.map((assembly) => {
-        const assemblyTotal = assembly.quantity * assembly.cos
+        const assemblyTotal = assembly.quantity * assembly.cost
 
         return (
           <div key={assembly.id}>
