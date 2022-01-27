@@ -9,7 +9,7 @@ const Home: NextPage = () => {
 
   if (isError) return <div>Something went wrong.</div>
 
-  const totalCost = data?.estimate.estimateAssemblies.reduce(
+  const totalCost = data?.estimate.assemblies.reduce(
     (acc, estimate) => acc + estimate.quantity * estimate.cost,
     0
   )
@@ -17,7 +17,7 @@ const Home: NextPage = () => {
   return (
     <div>
       <div>Project Total: {totalCost}</div>
-      {data?.estimate.estimateAssemblies.map((assembly) => {
+      {data?.estimate.assemblies.map((assembly) => {
         const assemblyTotal = assembly.quantity * assembly.cost
 
         return (

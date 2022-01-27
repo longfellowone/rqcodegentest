@@ -87,9 +87,9 @@ export type DeleteProjectPayload = {
 
 export type Estimate = {
   __typename?: 'Estimate';
+  assemblies: Array<EstimateAssembly>;
   cost: Scalars['Int'];
   estimate: Scalars['String'];
-  estimateAssemblies: Array<EstimateAssembly>;
   id: Scalars['ID'];
 };
 
@@ -168,7 +168,7 @@ export type QueryRootProjectArgs = {
 export type EstimateQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type EstimateQuery = { __typename?: 'QueryRoot', estimate: { __typename?: 'Estimate', estimateAssemblies: Array<{ __typename?: 'EstimateAssembly', id: string, assembly: string, cost: number, quantity: number }> } };
+export type EstimateQuery = { __typename?: 'QueryRoot', estimate: { __typename?: 'Estimate', assemblies: Array<{ __typename?: 'EstimateAssembly', id: string, assembly: string, cost: number, quantity: number }> } };
 
 export type ProjectDetailsFragment = { __typename?: 'Project', id: string, project: string };
 
@@ -186,7 +186,7 @@ export const ProjectDetailsFragmentDoc = /*#__PURE__*/ `
 export const EstimateDocument = /*#__PURE__*/ `
     query Estimate {
   estimate(id: "00000000-0000-0000-0000-000000000001") {
-    estimateAssemblies {
+    assemblies {
       id
       assembly
       cost
