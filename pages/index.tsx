@@ -1,17 +1,17 @@
-import type { GetServerSideProps, NextPage } from "next";
-import { dehydrate, QueryClient } from "react-query";
-import ProjectDetail from "../components/ProjectDetail";
-import { ProjectsQuery, useProjectsQuery } from "../generated/graphql";
+import type { GetServerSideProps, NextPage } from 'next'
+import { dehydrate, QueryClient } from 'react-query'
+import ProjectDetail from '../components/ProjectDetail'
+import { ProjectsQuery, useProjectsQuery } from '../generated/graphql'
 
 // For config and tailwind setup
 // https://github.com/longfellowone/cloud-client
 
 const Home: NextPage = () => {
-  const { isLoading, isError, data } = useProjectsQuery<ProjectsQuery>();
+  const { isLoading, isError, data } = useProjectsQuery()
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <div>Loading...</div>
 
-  if (isError) return <div>Something went wrong.</div>;
+  if (isError) return <div>Something went wrong.</div>
 
   return (
     <div>
@@ -19,23 +19,20 @@ const Home: NextPage = () => {
         <ProjectDetail key={project.id} project={project} />
       ))}
     </div>
-  );
-};
-``;
+  )
+}
+;``
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const queryClient = new QueryClient();
+  const queryClient = new QueryClient()
 
-  await queryClient.prefetchQuery(
-    useProjectsQuery.getKey(),
-    useProjectsQuery.fetcher()
-  );
+  await queryClient.prefetchQuery(useProjectsQuery.getKey(), useProjectsQuery.fetcher())
 
   return {
     props: {
       dehydratedState: dehydrate(queryClient),
     },
-  };
-};
+  }
+}
 
-export default Home;
+export default Home

@@ -1,9 +1,9 @@
-import type { AppProps } from "next/app";
-import { Hydrate, QueryClient, QueryClientProvider } from "react-query";
-import { useState } from "react";
+import type { AppProps } from 'next/app'
+import { Hydrate, QueryClient, QueryClientProvider } from 'react-query'
+import { useState } from 'react'
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const [queryClient] = useState(() => new QueryClient());
+  const [queryClient] = useState(() => new QueryClient())
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -11,7 +11,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <Component {...pageProps} />
       </Hydrate>
     </QueryClientProvider>
-  );
+  )
 }
 
-export default MyApp;
+export default MyApp

@@ -1,7 +1,7 @@
 overwrite: true
 # watch: true
-schema: "http://localhost:8080"
-documents: "./**/*.graphql"
+schema: 'http://localhost:8080'
+documents: './**/*.graphql'
 generates:
   generated/graphql.ts:
     plugins:
@@ -13,7 +13,7 @@ generates:
       exposeQueryKeys: true
       exposeFetcher: true
       fetcher:
-        endpoint: "http://localhost:8080"
+        endpoint: 'http://localhost:8080'
         # fetchParams:
         #   headers:
         #     Content-Type: application/json
