@@ -1,0 +1,7 @@
+mutation AddAssemblyToEstimate($id: ID!, $input: AddAssemblyToEstimateInput!) {
+  addAssemblyToEstimate(id: $id, input: $input) {
+    estimate {
+      id
+    }
+  }
+}

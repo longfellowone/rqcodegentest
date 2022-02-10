@@ -1,0 +1,6 @@
+fragment AssemblyItemDetails on AssemblyItem {
+  id
+  item
+  cost
+  quantity
+}

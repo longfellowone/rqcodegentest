@@ -1,10 +1,14 @@
 query Estimate {
   estimate(id: "00000000-0000-0000-0000-000000000001") {
+    # cost
     assemblies {
       id
       assembly
-      cost
+      #   cost
       quantity
+      items {
+        ...AssemblyItemDetails
+      }
     }
   }
 }
