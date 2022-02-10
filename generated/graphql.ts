@@ -1,28 +1,11 @@
-import { useMutation, UseMutationOptions, useQuery, UseQueryOptions } from 'react-query';
+import gql from 'graphql-tag';
+import * as Urql from 'urql';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
-
-function fetcher<TData, TVariables>(query: string, variables?: TVariables) {
-  return async (): Promise<TData> => {
-    const res = await fetch("http://localhost:8080", {
-    method: "POST",
-      body: JSON.stringify({ query, variables }),
-    });
-
-    const json = await res.json();
-
-    if (json.errors) {
-      const { message } = json.errors[0];
-
-      throw new Error(message);
-    }
-
-    return json.data;
-  }
-}
+export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -54,23 +37,23 @@ export type AddItemToAssemblyPayload = {
 
 export type Assembly = {
   __typename?: 'Assembly';
-  id: Scalars['ID'];
-  cost: Scalars['Int'];
   assembly: Scalars['String'];
+  cost: Scalars['Int'];
+  id: Scalars['ID'];
   items: Array<AssemblyItem>;
 };
 
 export type AssemblyItem = {
   __typename?: 'AssemblyItem';
+  cost: Scalars['Int'];
   id: Scalars['ID'];
   item: Scalars['String'];
-  cost: Scalars['Int'];
   quantity: Scalars['Int'];
 };
 
 export type CreateEstimateInput = {
-  projectId: Scalars['ID'];
   estimate: Scalars['String'];
+  projectId: Scalars['ID'];
 };
 
 export type CreateEstimatePayload = {
@@ -107,56 +90,31 @@ export type DeleteProjectPayload = {
 
 export type Estimate = {
   __typename?: 'Estimate';
-  id: Scalars['ID'];
-  estimate: Scalars['String'];
-  cost: Scalars['Int'];
   assemblies: Array<EstimateAssembly>;
+  cost: Scalars['Int'];
+  estimate: Scalars['String'];
+  id: Scalars['ID'];
 };
 
 export type EstimateAssembly = {
   __typename?: 'EstimateAssembly';
-  id: Scalars['ID'];
   assembly: Scalars['String'];
   cost: Scalars['Int'];
-  quantity: Scalars['Int'];
+  id: Scalars['ID'];
   items: Array<AssemblyItem>;
+  quantity: Scalars['Int'];
 };
 
 export type MutationRoot = {
   __typename?: 'MutationRoot';
-  createProject: CreateProjectPayload;
-  deleteProject: DeleteProjectPayload;
-  updateProject: UpdateProjectPayload;
-  createEstimate: CreateEstimatePayload;
-  deleteEstimate: DeleteEstimatePayload;
   addAssemblyToEstimate: AddAssemblyToEstimatePayload;
   addItemToAssembly: AddItemToAssemblyPayload;
+  createEstimate: CreateEstimatePayload;
+  createProject: CreateProjectPayload;
+  deleteEstimate: DeleteEstimatePayload;
+  deleteProject: DeleteProjectPayload;
   updateAssemblyItemQuantity: UpdateAssemblyItemQuantityPayload;
-};
-
-
-export type MutationRootCreateProjectArgs = {
-  input: CreateProjectInput;
-};
-
-
-export type MutationRootDeleteProjectArgs = {
-  input: DeleteProjectInput;
-};
-
-
-export type MutationRootUpdateProjectArgs = {
-  input: UpdateProjectInput;
-};
-
-
-export type MutationRootCreateEstimateArgs = {
-  input: CreateEstimateInput;
-};
-
-
-export type MutationRootDeleteEstimateArgs = {
-  input: DeleteEstimateInput;
+  updateProject: UpdateProjectPayload;
 };
 
 
@@ -172,29 +130,54 @@ export type MutationRootAddItemToAssemblyArgs = {
 };
 
 
+export type MutationRootCreateEstimateArgs = {
+  input: CreateEstimateInput;
+};
+
+
+export type MutationRootCreateProjectArgs = {
+  input: CreateProjectInput;
+};
+
+
+export type MutationRootDeleteEstimateArgs = {
+  input: DeleteEstimateInput;
+};
+
+
+export type MutationRootDeleteProjectArgs = {
+  input: DeleteProjectInput;
+};
+
+
 export type MutationRootUpdateAssemblyItemQuantityArgs = {
   id: Scalars['ID'];
   input: UpdateAssemblyItemQuantityInput;
 };
 
+
+export type MutationRootUpdateProjectArgs = {
+  input: UpdateProjectInput;
+};
+
 export type Project = {
   __typename?: 'Project';
+  estimates: Array<Estimate>;
   id: Scalars['ID'];
   project: Scalars['String'];
-  estimates: Array<Estimate>;
 };
 
 export type QueryRoot = {
   __typename?: 'QueryRoot';
+  assembly: Assembly;
+  estimate: Estimate;
   project: Project;
   projects: Array<Project>;
-  estimate: Estimate;
-  assembly: Assembly;
   testEstimate: TestEstimate;
 };
 
 
-export type QueryRootProjectArgs = {
+export type QueryRootAssemblyArgs = {
   id: Scalars['ID'];
 };
 
@@ -204,7 +187,7 @@ export type QueryRootEstimateArgs = {
 };
 
 
-export type QueryRootAssemblyArgs = {
+export type QueryRootProjectArgs = {
   id: Scalars['ID'];
 };
 
@@ -215,19 +198,19 @@ export type QueryRootTestEstimateArgs = {
 
 export type TestAssembly = {
   __typename?: 'TestAssembly';
-  id: Scalars['ID'];
-  name: Scalars['String'];
   cost: Scalars['Int'];
-  quantity: Scalars['Int'];
+  id: Scalars['ID'];
   item: Scalars['String'];
+  name: Scalars['String'];
+  quantity: Scalars['Int'];
 };
 
 export type TestEstimate = {
   __typename?: 'TestEstimate';
+  assemblies: Array<TestAssembly>;
+  cost: Scalars['Int'];
   id: Scalars['ID'];
   name: Scalars['String'];
-  cost: Scalars['Int'];
-  assemblies: Array<TestAssembly>;
 };
 
 export type UpdateAssemblyItemQuantityInput = {
@@ -256,23 +239,16 @@ export type AddAssemblyToEstimateMutationVariables = Exact<{
 }>;
 
 
-export type AddAssemblyToEstimateMutation = { __typename?: 'MutationRoot', addAssemblyToEstimate: { __typename?: 'AddAssemblyToEstimatePayload', estimate?: { __typename?: 'Estimate', id: string } | null | undefined } };
+export type AddAssemblyToEstimateMutation = { __typename?: 'MutationRoot', addAssemblyToEstimate: { __typename?: 'AddAssemblyToEstimatePayload', estimate?: { __typename?: 'Estimate', id: string, assemblies: Array<{ __typename?: 'EstimateAssembly', id: string, assembly: string, quantity: number, items: Array<{ __typename?: 'AssemblyItem', id: string, item: string, cost: number, quantity: number }> }> } | null } };
 
 export type AssemblyItemDetailsFragment = { __typename?: 'AssemblyItem', id: string, item: string, cost: number, quantity: number };
 
 export type EstimateQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type EstimateQuery = { __typename?: 'QueryRoot', estimate: { __typename?: 'Estimate', assemblies: Array<{ __typename?: 'EstimateAssembly', id: string, assembly: string, quantity: number, items: Array<{ __typename?: 'AssemblyItem', id: string, item: string, cost: number, quantity: number }> }> } };
+export type EstimateQuery = { __typename?: 'QueryRoot', estimate: { __typename?: 'Estimate', id: string, assemblies: Array<{ __typename?: 'EstimateAssembly', id: string, assembly: string, quantity: number, items: Array<{ __typename?: 'AssemblyItem', id: string, item: string, cost: number, quantity: number }> }> } };
 
-export type ProjectDetailFragment = { __typename?: 'Project', id: string, project: string };
-
-export type ProjectsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type ProjectsQuery = { __typename?: 'QueryRoot', projects: Array<{ __typename?: 'Project', id: string, project: string }> };
-
-export const AssemblyItemDetailsFragmentDoc = /*#__PURE__*/ `
+export const AssemblyItemDetailsFragmentDoc = gql`
     fragment AssemblyItemDetails on AssemblyItem {
   id
   item
@@ -280,34 +256,31 @@ export const AssemblyItemDetailsFragmentDoc = /*#__PURE__*/ `
   quantity
 }
     `;
-export const ProjectDetailFragmentDoc = /*#__PURE__*/ `
-    fragment ProjectDetail on Project {
-  id
-  project
-}
-    `;
-export const AddAssemblyToEstimateDocument = /*#__PURE__*/ `
+export const AddAssemblyToEstimateDocument = gql`
     mutation AddAssemblyToEstimate($id: ID!, $input: AddAssemblyToEstimateInput!) {
   addAssemblyToEstimate(id: $id, input: $input) {
     estimate {
       id
+      assemblies {
+        id
+        assembly
+        quantity
+        items {
+          ...AssemblyItemDetails
+        }
+      }
     }
   }
 }
-    `;
-export const useAddAssemblyToEstimateMutation = <
-      TError = unknown,
-      TContext = unknown
-    >(options?: UseMutationOptions<AddAssemblyToEstimateMutation, TError, AddAssemblyToEstimateMutationVariables, TContext>) =>
-    useMutation<AddAssemblyToEstimateMutation, TError, AddAssemblyToEstimateMutationVariables, TContext>(
-      'AddAssemblyToEstimate',
-      (variables?: AddAssemblyToEstimateMutationVariables) => fetcher<AddAssemblyToEstimateMutation, AddAssemblyToEstimateMutationVariables>(AddAssemblyToEstimateDocument, variables)(),
-      options
-    );
-useAddAssemblyToEstimateMutation.fetcher = (variables: AddAssemblyToEstimateMutationVariables) => fetcher<AddAssemblyToEstimateMutation, AddAssemblyToEstimateMutationVariables>(AddAssemblyToEstimateDocument, variables);
-export const EstimateDocument = /*#__PURE__*/ `
+    ${AssemblyItemDetailsFragmentDoc}`;
+
+export function useAddAssemblyToEstimateMutation() {
+  return Urql.useMutation<AddAssemblyToEstimateMutation, AddAssemblyToEstimateMutationVariables>(AddAssemblyToEstimateDocument);
+};
+export const EstimateDocument = gql`
     query Estimate {
   estimate(id: "00000000-0000-0000-0000-000000000001") {
+    id
     assemblies {
       id
       assembly
@@ -319,44 +292,7 @@ export const EstimateDocument = /*#__PURE__*/ `
   }
 }
     ${AssemblyItemDetailsFragmentDoc}`;
-export const useEstimateQuery = <
-      TData = EstimateQuery,
-      TError = unknown
-    >(
-      variables?: EstimateQueryVariables,
-      options?: UseQueryOptions<EstimateQuery, TError, TData>
-    ) =>
-    useQuery<EstimateQuery, TError, TData>(
-      variables === undefined ? ['Estimate'] : ['Estimate', variables],
-      fetcher<EstimateQuery, EstimateQueryVariables>(EstimateDocument, variables),
-      options
-    );
 
-useEstimateQuery.getKey = (variables?: EstimateQueryVariables) => variables === undefined ? ['Estimate'] : ['Estimate', variables];
-;
-
-useEstimateQuery.fetcher = (variables?: EstimateQueryVariables) => fetcher<EstimateQuery, EstimateQueryVariables>(EstimateDocument, variables);
-export const ProjectsDocument = /*#__PURE__*/ `
-    query Projects {
-  projects {
-    ...ProjectDetail
-  }
-}
-    ${ProjectDetailFragmentDoc}`;
-export const useProjectsQuery = <
-      TData = ProjectsQuery,
-      TError = unknown
-    >(
-      variables?: ProjectsQueryVariables,
-      options?: UseQueryOptions<ProjectsQuery, TError, TData>
-    ) =>
-    useQuery<ProjectsQuery, TError, TData>(
-      variables === undefined ? ['Projects'] : ['Projects', variables],
-      fetcher<ProjectsQuery, ProjectsQueryVariables>(ProjectsDocument, variables),
-      options
-    );
-
-useProjectsQuery.getKey = (variables?: ProjectsQueryVariables) => variables === undefined ? ['Projects'] : ['Projects', variables];
-;
-
-useProjectsQuery.fetcher = (variables?: ProjectsQueryVariables) => fetcher<ProjectsQuery, ProjectsQueryVariables>(ProjectsDocument, variables);
+export function useEstimateQuery(options?: Omit<Urql.UseQueryArgs<EstimateQueryVariables>, 'query'>) {
+  return Urql.useQuery<EstimateQuery>({ query: EstimateDocument, ...options });
+};

@@ -8,7 +8,9 @@ interface Props {
 const AssemblyItemDetails: NextPage<Props> = ({ item }) => {
   return (
     <>
-      <div className="">{item.item}</div>
+      <div className="">
+        {item.item} - ${item.cost}
+      </div>
     </>
   )
 }

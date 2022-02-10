@@ -1,4 +1,0 @@
-fragment ProjectDetail on Project {
-  id
-  project
-}

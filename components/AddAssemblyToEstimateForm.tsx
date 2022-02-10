@@ -1,6 +1,5 @@
 import { NextPage } from 'next'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { useQueryClient } from 'react-query'
 import { useAddAssemblyToEstimateMutation } from '../generated/graphql'
 
 interface Props {}
@@ -13,11 +12,9 @@ interface FormValues {
 const AddAssemblyToEstimateForm: NextPage<Props> = () => {
   const { register, handleSubmit } = useForm<FormValues>()
 
-  const queryClient = useQueryClient()
+  const [mutateResult, mutate] = useAddAssemblyToEstimateMutation()
 
-  const { mutate } = useAddAssemblyToEstimateMutation({
-    onSuccess: () => queryClient.invalidateQueries('Estimate'),
-  })
+  mutateResult.error && console.log(mutateResult.error.message)
 
   const onSubmit: SubmitHandler<FormValues> = (form) => {
     const estimateID = '00000000-0000-0000-0000-000000000001'

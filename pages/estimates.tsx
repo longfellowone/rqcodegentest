@@ -1,17 +1,21 @@
-import type { GetServerSideProps, NextPage } from 'next'
-import { dehydrate, QueryClient } from 'react-query'
+import { devtoolsExchange } from '@urql/devtools'
+import { cacheExchange } from '@urql/exchange-graphcache'
+import type { NextPage } from 'next'
+import { withUrqlClient } from 'next-urql'
+import { dedupExchange, defaultExchanges, fetchExchange } from 'urql'
 import AddAssemblyToEstimateForm from '../components/AddAssemblyToEstimateForm'
 import AssemblyItemDetails from '../components/AssemblyItemDetails'
 import { useEstimateQuery } from '../generated/graphql'
+import schema from '../generated/graphql.schema'
 
-const Home: NextPage = () => {
-  const { isLoading, isError, data } = useEstimateQuery()
+const Estimates: NextPage = () => {
+  const [result] = useEstimateQuery()
 
-  if (isLoading) return <div>Loading...</div>
+  if (!result.data) return <div>Loading...</div>
 
-  if (isError) return <div>Something went wrong.</div>
+  if (result.error) return <div>Something went wrong.</div>
 
-  const estimateTotal = data?.estimate.assemblies.reduce((total, assembly) => {
+  const estimateTotal = result.data?.estimate.assemblies.reduce((total, assembly) => {
     const assemblyTotal = assembly.items.reduce(
       (total, item) => total + item.quantity * item.cost,
       0
@@ -20,23 +24,19 @@ const Home: NextPage = () => {
     return total + assembly.quantity * assemblyTotal
   }, 0)
 
-  // const estimateTotal = data?.estimate.cost
-
   return (
     <>
       <AddAssemblyToEstimateForm />
       <div>Estimate Total: {estimateTotal}</div>
-      {data?.estimate.assemblies.map((assembly) => {
+      {result.data?.estimate.assemblies.map((assembly) => {
         const assemblyTotal = assembly.items.reduce(
           (total, item) => total + item.quantity * item.cost,
           0
         )
 
-        // const assemblyTotal = assembly.cost
-
         return (
-          <>
-            <div key={assembly.id}>
+          <div key={assembly.id}>
+            <div>
               {assembly.assembly} - Quantity: {assembly.quantity} - Assembly Total: {assemblyTotal}
             </div>
             <div>
@@ -44,23 +44,14 @@ const Home: NextPage = () => {
                 <AssemblyItemDetails key={item.id} item={item} />
               ))}
             </div>
-          </>
+          </div>
         )
       })}
     </>
   )
 }
 
-// export const getServerSideProps: GetServerSideProps = async () => {
-//   const queryClient = new QueryClient()
-
-//   await queryClient.prefetchQuery(useEstimateQuery.getKey(), useEstimateQuery.fetcher())
-
-//   return {
-//     props: {
-//       dehydratedState: dehydrate(queryClient),
-//     },
-//   }
-// }
-
-export default Home
+export default withUrqlClient((_ssrExchange, _ctx) => ({
+  url: 'http://localhost:8080',
+  exchanges: [devtoolsExchange, dedupExchange, cacheExchange({ schema }), fetchExchange],
+}))(Estimates)
