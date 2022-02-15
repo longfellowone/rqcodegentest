@@ -7,13 +7,9 @@ generates:
     plugins:
       - typescript
       - typescript-operations
-      - typescript-react-query
+      - typescript-urql
     config:
-      pureMagicComment: true
-      exposeQueryKeys: true
-      exposeFetcher: true
-      fetcher:
-        endpoint: 'http://localhost:8080'
-        # fetchParams:
-        #   headers:
-        #     Content-Type: application/json
+      skipTypename: true
+  generated/graphql.schema.ts:
+    plugins:
+      - urql-introspection

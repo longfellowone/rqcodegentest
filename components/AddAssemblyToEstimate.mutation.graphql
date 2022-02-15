@@ -1,7 +1,18 @@
-mutation AddAssemblyToEstimate($id: ID!, $input: AddAssemblyToEstimateInput!) {
-  addAssemblyToEstimate(id: $id, input: $input) {
-    estimate {
-      id
-    }
-  }
-}
+# mutation AddAssemblyToEstimate($id: ID!, $input: AddAssemblyToEstimateInput!) {
+#   addAssemblyToEstimate(id: $id, input: $input) {
+#     # Change this to EstimateParts fragment
+#     estimate {
+#       id
+#       # cost
+#       assemblies {
+#         id
+#         assembly
+#         #   cost
+#         quantity
+#         items {
+#           ...AssemblyItemDetails
+#         }
+#       }
+#     }
+#   }
+# }
