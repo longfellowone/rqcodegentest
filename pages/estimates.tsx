@@ -120,7 +120,8 @@ function assemblyTotals(quantity: number, components: Array<AssemblyComponent>) 
 // }
 
 export default withUrqlClient((_ssrExchange, _ctx) => ({
-  url: 'http://localhost:8080',
+  // url: 'http://localhost:8080',
+  url: 'https://est-wrtle.ondigitalocean.app/',
   exchanges: [
     // devtoolsExchange,
     dedupExchange,

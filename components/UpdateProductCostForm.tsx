@@ -17,7 +17,9 @@ const UpdateProductCostForm: NextPage<Props> = () => {
   mutateResult.error && console.log(mutateResult.error.message)
 
   const onSubmit: SubmitHandler<FormValues> = (form) => {
-    mutate({ input: { productId: form.id, cost: form.cost, labour: form.cost } })
+    let productId = '00000000-0000-0000-0000-000000000003'
+
+    mutate({ input: { productId: productId, cost: form.cost, labour: form.cost } })
   }
 
   return (
