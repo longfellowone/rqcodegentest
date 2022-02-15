@@ -15,165 +15,63 @@ export type Scalars = {
   Float: number;
 };
 
-export type AddAssemblyToEstimateInput = {
-  assemblyId: Scalars['ID'];
-  quantity?: InputMaybe<Scalars['Int']>;
-};
-
-export type AddAssemblyToEstimatePayload = {
-  __typename?: 'AddAssemblyToEstimatePayload';
-  estimate?: Maybe<Estimate>;
-};
-
-export type AddItemToAssemblyInput = {
-  itemId: Scalars['ID'];
-  quantity: Scalars['Int'];
-};
-
-export type AddItemToAssemblyPayload = {
-  __typename?: 'AddItemToAssemblyPayload';
-  assembly?: Maybe<Assembly>;
-};
-
 export type Assembly = {
-  __typename?: 'Assembly';
   assembly: Scalars['String'];
-  cost: Scalars['Int'];
+  components: Array<AssemblyComponent>;
   id: Scalars['ID'];
-  items: Array<AssemblyItem>;
 };
 
-export type AssemblyItem = {
-  __typename?: 'AssemblyItem';
-  cost: Scalars['Int'];
+export type AssemblyComponent = {
   id: Scalars['ID'];
-  item: Scalars['String'];
+  product: Product;
   quantity: Scalars['Int'];
-};
-
-export type CreateEstimateInput = {
-  estimate: Scalars['String'];
-  projectId: Scalars['ID'];
-};
-
-export type CreateEstimatePayload = {
-  __typename?: 'CreateEstimatePayload';
-  estimate?: Maybe<Estimate>;
-};
-
-export type CreateProjectInput = {
-  project: Scalars['String'];
-};
-
-export type CreateProjectPayload = {
-  __typename?: 'CreateProjectPayload';
-  project?: Maybe<Project>;
-};
-
-export type DeleteEstimateInput = {
-  id: Scalars['ID'];
-};
-
-export type DeleteEstimatePayload = {
-  __typename?: 'DeleteEstimatePayload';
-  id: Scalars['ID'];
-};
-
-export type DeleteProjectInput = {
-  id: Scalars['ID'];
-};
-
-export type DeleteProjectPayload = {
-  __typename?: 'DeleteProjectPayload';
-  id: Scalars['ID'];
 };
 
 export type Estimate = {
-  __typename?: 'Estimate';
-  assemblies: Array<EstimateAssembly>;
-  cost: Scalars['Int'];
   estimate: Scalars['String'];
+  groups: Array<EstimateGroup>;
   id: Scalars['ID'];
 };
 
-export type EstimateAssembly = {
-  __typename?: 'EstimateAssembly';
-  assembly: Scalars['String'];
-  cost: Scalars['Int'];
+export type EstimateGroup = {
+  group: Scalars['String'];
   id: Scalars['ID'];
-  items: Array<AssemblyItem>;
+  lineItems: Array<EstimateGroupLineItem>;
+};
+
+export type EstimateGroupLineItem = {
+  assembly: Assembly;
+  id: Scalars['ID'];
   quantity: Scalars['Int'];
 };
 
 export type MutationRoot = {
-  __typename?: 'MutationRoot';
-  addAssemblyToEstimate: AddAssemblyToEstimatePayload;
-  addItemToAssembly: AddItemToAssemblyPayload;
-  createEstimate: CreateEstimatePayload;
-  createProject: CreateProjectPayload;
-  deleteEstimate: DeleteEstimatePayload;
-  deleteProject: DeleteProjectPayload;
-  updateAssemblyItemQuantity: UpdateAssemblyItemQuantityPayload;
-  updateProject: UpdateProjectPayload;
+  updateProduct: UpdateProductPayload;
 };
 
 
-export type MutationRootAddAssemblyToEstimateArgs = {
+export type MutationRootUpdateProductArgs = {
+  input: UpdateProductInput;
+};
+
+export type Product = {
+  cost: Scalars['Int'];
   id: Scalars['ID'];
-  input: AddAssemblyToEstimateInput;
-};
-
-
-export type MutationRootAddItemToAssemblyArgs = {
-  id: Scalars['ID'];
-  input: AddItemToAssemblyInput;
-};
-
-
-export type MutationRootCreateEstimateArgs = {
-  input: CreateEstimateInput;
-};
-
-
-export type MutationRootCreateProjectArgs = {
-  input: CreateProjectInput;
-};
-
-
-export type MutationRootDeleteEstimateArgs = {
-  input: DeleteEstimateInput;
-};
-
-
-export type MutationRootDeleteProjectArgs = {
-  input: DeleteProjectInput;
-};
-
-
-export type MutationRootUpdateAssemblyItemQuantityArgs = {
-  id: Scalars['ID'];
-  input: UpdateAssemblyItemQuantityInput;
-};
-
-
-export type MutationRootUpdateProjectArgs = {
-  input: UpdateProjectInput;
+  labour: Scalars['Int'];
+  product: Scalars['String'];
 };
 
 export type Project = {
-  __typename?: 'Project';
   estimates: Array<Estimate>;
   id: Scalars['ID'];
   project: Scalars['String'];
 };
 
 export type QueryRoot = {
-  __typename?: 'QueryRoot';
   assembly: Assembly;
   estimate: Estimate;
   project: Project;
   projects: Array<Project>;
-  testEstimate: TestEstimate;
 };
 
 
@@ -191,107 +89,75 @@ export type QueryRootProjectArgs = {
   id: Scalars['ID'];
 };
 
-
-export type QueryRootTestEstimateArgs = {
-  estimateId: Scalars['ID'];
+export type UpdateProductInput = {
+  cost?: InputMaybe<Scalars['Int']>;
+  labour?: InputMaybe<Scalars['Int']>;
+  product?: InputMaybe<Scalars['String']>;
+  productId: Scalars['ID'];
 };
 
-export type TestAssembly = {
-  __typename?: 'TestAssembly';
-  cost: Scalars['Int'];
-  id: Scalars['ID'];
-  item: Scalars['String'];
-  name: Scalars['String'];
-  quantity: Scalars['Int'];
+export type UpdateProductPayload = {
+  product?: Maybe<Product>;
 };
 
-export type TestEstimate = {
-  __typename?: 'TestEstimate';
-  assemblies: Array<TestAssembly>;
-  cost: Scalars['Int'];
-  id: Scalars['ID'];
-  name: Scalars['String'];
-};
-
-export type UpdateAssemblyItemQuantityInput = {
-  itemId: Scalars['ID'];
-  quantity: Scalars['Int'];
-};
-
-export type UpdateAssemblyItemQuantityPayload = {
-  __typename?: 'UpdateAssemblyItemQuantityPayload';
-  assembly?: Maybe<Assembly>;
-};
-
-export type UpdateProjectInput = {
-  id: Scalars['ID'];
-  project: Scalars['String'];
-};
-
-export type UpdateProjectPayload = {
-  __typename?: 'UpdateProjectPayload';
-  project?: Maybe<Project>;
-};
-
-export type AddAssemblyToEstimateMutationVariables = Exact<{
-  id: Scalars['ID'];
-  input: AddAssemblyToEstimateInput;
+export type UpdateProductMutationVariables = Exact<{
+  input: UpdateProductInput;
 }>;
 
 
-export type AddAssemblyToEstimateMutation = { __typename?: 'MutationRoot', addAssemblyToEstimate: { __typename?: 'AddAssemblyToEstimatePayload', estimate?: { __typename?: 'Estimate', id: string, assemblies: Array<{ __typename?: 'EstimateAssembly', id: string, assembly: string, quantity: number, items: Array<{ __typename?: 'AssemblyItem', id: string, item: string, cost: number, quantity: number }> }> } | null } };
-
-export type AssemblyItemDetailsFragment = { __typename?: 'AssemblyItem', id: string, item: string, cost: number, quantity: number };
+export type UpdateProductMutation = { updateProduct: { product?: { id: string, cost: number, labour: number } | null } };
 
 export type EstimateQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type EstimateQuery = { __typename?: 'QueryRoot', estimate: { __typename?: 'Estimate', id: string, assemblies: Array<{ __typename?: 'EstimateAssembly', id: string, assembly: string, quantity: number, items: Array<{ __typename?: 'AssemblyItem', id: string, item: string, cost: number, quantity: number }> }> } };
+export type EstimateQuery = { estimate: { id: string, estimate: string, groups: Array<{ id: string, group: string, lineItems: Array<{ id: string, quantity: number, assembly: { id: string, assembly: string, components: Array<{ id: string, quantity: number, product: { id: string, product: string, cost: number, labour: number } }> } }> }> } };
 
-export const AssemblyItemDetailsFragmentDoc = gql`
-    fragment AssemblyItemDetails on AssemblyItem {
-  id
-  item
-  cost
-  quantity
-}
-    `;
-export const AddAssemblyToEstimateDocument = gql`
-    mutation AddAssemblyToEstimate($id: ID!, $input: AddAssemblyToEstimateInput!) {
-  addAssemblyToEstimate(id: $id, input: $input) {
-    estimate {
+
+export const UpdateProductDocument = gql`
+    mutation UpdateProduct($input: UpdateProductInput!) {
+  updateProduct(input: $input) {
+    product {
       id
-      assemblies {
-        id
-        assembly
-        quantity
-        items {
-          ...AssemblyItemDetails
-        }
-      }
+      cost
+      labour
     }
   }
 }
-    ${AssemblyItemDetailsFragmentDoc}`;
+    `;
 
-export function useAddAssemblyToEstimateMutation() {
-  return Urql.useMutation<AddAssemblyToEstimateMutation, AddAssemblyToEstimateMutationVariables>(AddAssemblyToEstimateDocument);
+export function useUpdateProductMutation() {
+  return Urql.useMutation<UpdateProductMutation, UpdateProductMutationVariables>(UpdateProductDocument);
 };
 export const EstimateDocument = gql`
     query Estimate {
   estimate(id: "00000000-0000-0000-0000-000000000001") {
     id
-    assemblies {
+    estimate
+    groups {
       id
-      assembly
-      quantity
-      items {
-        ...AssemblyItemDetails
+      group
+      lineItems {
+        id
+        quantity
+        assembly {
+          id
+          assembly
+          components {
+            id
+            quantity
+            product {
+              id
+              product
+              cost
+              labour
+            }
+          }
+        }
       }
     }
   }
 }
-    ${AssemblyItemDetailsFragmentDoc}`;
+    `;
 
 export function useEstimateQuery(options?: Omit<Urql.UseQueryArgs<EstimateQueryVariables>, 'query'>) {
   return Urql.useQuery<EstimateQuery>({ query: EstimateDocument, ...options });

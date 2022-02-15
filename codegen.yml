@@ -9,6 +9,7 @@ generates:
       - typescript-operations
       - typescript-urql
     config:
+      skipTypename: true
   generated/graphql.schema.ts:
     plugins:
       - urql-introspection

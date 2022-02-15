@@ -11,38 +11,6 @@ export default {
     "types": [
       {
         "kind": "OBJECT",
-        "name": "AddAssemblyToEstimatePayload",
-        "fields": [
-          {
-            "name": "estimate",
-            "type": {
-              "kind": "OBJECT",
-              "name": "Estimate",
-              "ofType": null
-            },
-            "args": []
-          }
-        ],
-        "interfaces": []
-      },
-      {
-        "kind": "OBJECT",
-        "name": "AddItemToAssemblyPayload",
-        "fields": [
-          {
-            "name": "assembly",
-            "type": {
-              "kind": "OBJECT",
-              "name": "Assembly",
-              "ofType": null
-            },
-            "args": []
-          }
-        ],
-        "interfaces": []
-      },
-      {
-        "kind": "OBJECT",
         "name": "Assembly",
         "fields": [
           {
@@ -57,12 +25,19 @@ export default {
             "args": []
           },
           {
-            "name": "cost",
+            "name": "components",
             "type": {
               "kind": "NON_NULL",
               "ofType": {
-                "kind": "SCALAR",
-                "name": "Any"
+                "kind": "LIST",
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "AssemblyComponent",
+                    "ofType": null
+                  }
+                }
               }
             },
             "args": []
@@ -74,24 +49,6 @@ export default {
               "ofType": {
                 "kind": "SCALAR",
                 "name": "Any"
-              }
-            },
-            "args": []
-          },
-          {
-            "name": "items",
-            "type": {
-              "kind": "NON_NULL",
-              "ofType": {
-                "kind": "LIST",
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "ofType": {
-                    "kind": "OBJECT",
-                    "name": "AssemblyItem",
-                    "ofType": null
-                  }
-                }
               }
             },
             "args": []
@@ -101,19 +58,8 @@ export default {
       },
       {
         "kind": "OBJECT",
-        "name": "AssemblyItem",
+        "name": "AssemblyComponent",
         "fields": [
-          {
-            "name": "cost",
-            "type": {
-              "kind": "NON_NULL",
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Any"
-              }
-            },
-            "args": []
-          },
           {
             "name": "id",
             "type": {
@@ -126,12 +72,13 @@ export default {
             "args": []
           },
           {
-            "name": "item",
+            "name": "product",
             "type": {
               "kind": "NON_NULL",
               "ofType": {
-                "kind": "SCALAR",
-                "name": "Any"
+                "kind": "OBJECT",
+                "name": "Product",
+                "ofType": null
               }
             },
             "args": []
@@ -152,43 +99,11 @@ export default {
       },
       {
         "kind": "OBJECT",
-        "name": "CreateEstimatePayload",
+        "name": "Estimate",
         "fields": [
           {
             "name": "estimate",
             "type": {
-              "kind": "OBJECT",
-              "name": "Estimate",
-              "ofType": null
-            },
-            "args": []
-          }
-        ],
-        "interfaces": []
-      },
-      {
-        "kind": "OBJECT",
-        "name": "CreateProjectPayload",
-        "fields": [
-          {
-            "name": "project",
-            "type": {
-              "kind": "OBJECT",
-              "name": "Project",
-              "ofType": null
-            },
-            "args": []
-          }
-        ],
-        "interfaces": []
-      },
-      {
-        "kind": "OBJECT",
-        "name": "DeleteEstimatePayload",
-        "fields": [
-          {
-            "name": "id",
-            "type": {
               "kind": "NON_NULL",
               "ofType": {
                 "kind": "SCALAR",
@@ -196,34 +111,9 @@ export default {
               }
             },
             "args": []
-          }
-        ],
-        "interfaces": []
-      },
-      {
-        "kind": "OBJECT",
-        "name": "DeleteProjectPayload",
-        "fields": [
+          },
           {
-            "name": "id",
-            "type": {
-              "kind": "NON_NULL",
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Any"
-              }
-            },
-            "args": []
-          }
-        ],
-        "interfaces": []
-      },
-      {
-        "kind": "OBJECT",
-        "name": "Estimate",
-        "fields": [
-          {
-            "name": "assemblies",
+            "name": "groups",
             "type": {
               "kind": "NON_NULL",
               "ofType": {
@@ -232,32 +122,10 @@ export default {
                   "kind": "NON_NULL",
                   "ofType": {
                     "kind": "OBJECT",
-                    "name": "EstimateAssembly",
+                    "name": "EstimateGroup",
                     "ofType": null
                   }
                 }
-              }
-            },
-            "args": []
-          },
-          {
-            "name": "cost",
-            "type": {
-              "kind": "NON_NULL",
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Any"
-              }
-            },
-            "args": []
-          },
-          {
-            "name": "estimate",
-            "type": {
-              "kind": "NON_NULL",
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Any"
               }
             },
             "args": []
@@ -278,26 +146,63 @@ export default {
       },
       {
         "kind": "OBJECT",
-        "name": "EstimateAssembly",
+        "name": "EstimateGroup",
+        "fields": [
+          {
+            "name": "group",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Any"
+              }
+            },
+            "args": []
+          },
+          {
+            "name": "id",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Any"
+              }
+            },
+            "args": []
+          },
+          {
+            "name": "lineItems",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "LIST",
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "EstimateGroupLineItem",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "args": []
+          }
+        ],
+        "interfaces": []
+      },
+      {
+        "kind": "OBJECT",
+        "name": "EstimateGroupLineItem",
         "fields": [
           {
             "name": "assembly",
             "type": {
               "kind": "NON_NULL",
               "ofType": {
-                "kind": "SCALAR",
-                "name": "Any"
-              }
-            },
-            "args": []
-          },
-          {
-            "name": "cost",
-            "type": {
-              "kind": "NON_NULL",
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Any"
+                "kind": "OBJECT",
+                "name": "Assembly",
+                "ofType": null
               }
             },
             "args": []
@@ -309,24 +214,6 @@ export default {
               "ofType": {
                 "kind": "SCALAR",
                 "name": "Any"
-              }
-            },
-            "args": []
-          },
-          {
-            "name": "items",
-            "type": {
-              "kind": "NON_NULL",
-              "ofType": {
-                "kind": "LIST",
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "ofType": {
-                    "kind": "OBJECT",
-                    "name": "AssemblyItem",
-                    "ofType": null
-                  }
-                }
               }
             },
             "args": []
@@ -350,26 +237,16 @@ export default {
         "name": "MutationRoot",
         "fields": [
           {
-            "name": "addAssemblyToEstimate",
+            "name": "updateProduct",
             "type": {
               "kind": "NON_NULL",
               "ofType": {
                 "kind": "OBJECT",
-                "name": "AddAssemblyToEstimatePayload",
+                "name": "UpdateProductPayload",
                 "ofType": null
               }
             },
             "args": [
-              {
-                "name": "id",
-                "type": {
-                  "kind": "NON_NULL",
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "Any"
-                  }
-                }
-              },
               {
                 "name": "input",
                 "type": {
@@ -381,187 +258,57 @@ export default {
                 }
               }
             ]
+          }
+        ],
+        "interfaces": []
+      },
+      {
+        "kind": "OBJECT",
+        "name": "Product",
+        "fields": [
+          {
+            "name": "cost",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Any"
+              }
+            },
+            "args": []
           },
           {
-            "name": "addItemToAssembly",
+            "name": "id",
             "type": {
               "kind": "NON_NULL",
               "ofType": {
-                "kind": "OBJECT",
-                "name": "AddItemToAssemblyPayload",
-                "ofType": null
+                "kind": "SCALAR",
+                "name": "Any"
               }
             },
-            "args": [
-              {
-                "name": "id",
-                "type": {
-                  "kind": "NON_NULL",
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "Any"
-                  }
-                }
-              },
-              {
-                "name": "input",
-                "type": {
-                  "kind": "NON_NULL",
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "Any"
-                  }
-                }
-              }
-            ]
+            "args": []
           },
           {
-            "name": "createEstimate",
+            "name": "labour",
             "type": {
               "kind": "NON_NULL",
               "ofType": {
-                "kind": "OBJECT",
-                "name": "CreateEstimatePayload",
-                "ofType": null
+                "kind": "SCALAR",
+                "name": "Any"
               }
             },
-            "args": [
-              {
-                "name": "input",
-                "type": {
-                  "kind": "NON_NULL",
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "Any"
-                  }
-                }
-              }
-            ]
+            "args": []
           },
           {
-            "name": "createProject",
+            "name": "product",
             "type": {
               "kind": "NON_NULL",
               "ofType": {
-                "kind": "OBJECT",
-                "name": "CreateProjectPayload",
-                "ofType": null
+                "kind": "SCALAR",
+                "name": "Any"
               }
             },
-            "args": [
-              {
-                "name": "input",
-                "type": {
-                  "kind": "NON_NULL",
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "Any"
-                  }
-                }
-              }
-            ]
-          },
-          {
-            "name": "deleteEstimate",
-            "type": {
-              "kind": "NON_NULL",
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "DeleteEstimatePayload",
-                "ofType": null
-              }
-            },
-            "args": [
-              {
-                "name": "input",
-                "type": {
-                  "kind": "NON_NULL",
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "Any"
-                  }
-                }
-              }
-            ]
-          },
-          {
-            "name": "deleteProject",
-            "type": {
-              "kind": "NON_NULL",
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "DeleteProjectPayload",
-                "ofType": null
-              }
-            },
-            "args": [
-              {
-                "name": "input",
-                "type": {
-                  "kind": "NON_NULL",
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "Any"
-                  }
-                }
-              }
-            ]
-          },
-          {
-            "name": "updateAssemblyItemQuantity",
-            "type": {
-              "kind": "NON_NULL",
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "UpdateAssemblyItemQuantityPayload",
-                "ofType": null
-              }
-            },
-            "args": [
-              {
-                "name": "id",
-                "type": {
-                  "kind": "NON_NULL",
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "Any"
-                  }
-                }
-              },
-              {
-                "name": "input",
-                "type": {
-                  "kind": "NON_NULL",
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "Any"
-                  }
-                }
-              }
-            ]
-          },
-          {
-            "name": "updateProject",
-            "type": {
-              "kind": "NON_NULL",
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "UpdateProjectPayload",
-                "ofType": null
-              }
-            },
-            "args": [
-              {
-                "name": "input",
-                "type": {
-                  "kind": "NON_NULL",
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "Any"
-                  }
-                }
-              }
-            ]
+            "args": []
           }
         ],
         "interfaces": []
@@ -703,178 +450,19 @@ export default {
               }
             },
             "args": []
-          },
-          {
-            "name": "testEstimate",
-            "type": {
-              "kind": "NON_NULL",
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "TestEstimate",
-                "ofType": null
-              }
-            },
-            "args": [
-              {
-                "name": "estimateId",
-                "type": {
-                  "kind": "NON_NULL",
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "Any"
-                  }
-                }
-              }
-            ]
           }
         ],
         "interfaces": []
       },
       {
         "kind": "OBJECT",
-        "name": "TestAssembly",
+        "name": "UpdateProductPayload",
         "fields": [
           {
-            "name": "cost",
-            "type": {
-              "kind": "NON_NULL",
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Any"
-              }
-            },
-            "args": []
-          },
-          {
-            "name": "id",
-            "type": {
-              "kind": "NON_NULL",
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Any"
-              }
-            },
-            "args": []
-          },
-          {
-            "name": "item",
-            "type": {
-              "kind": "NON_NULL",
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Any"
-              }
-            },
-            "args": []
-          },
-          {
-            "name": "name",
-            "type": {
-              "kind": "NON_NULL",
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Any"
-              }
-            },
-            "args": []
-          },
-          {
-            "name": "quantity",
-            "type": {
-              "kind": "NON_NULL",
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Any"
-              }
-            },
-            "args": []
-          }
-        ],
-        "interfaces": []
-      },
-      {
-        "kind": "OBJECT",
-        "name": "TestEstimate",
-        "fields": [
-          {
-            "name": "assemblies",
-            "type": {
-              "kind": "NON_NULL",
-              "ofType": {
-                "kind": "LIST",
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "ofType": {
-                    "kind": "OBJECT",
-                    "name": "TestAssembly",
-                    "ofType": null
-                  }
-                }
-              }
-            },
-            "args": []
-          },
-          {
-            "name": "cost",
-            "type": {
-              "kind": "NON_NULL",
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Any"
-              }
-            },
-            "args": []
-          },
-          {
-            "name": "id",
-            "type": {
-              "kind": "NON_NULL",
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Any"
-              }
-            },
-            "args": []
-          },
-          {
-            "name": "name",
-            "type": {
-              "kind": "NON_NULL",
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Any"
-              }
-            },
-            "args": []
-          }
-        ],
-        "interfaces": []
-      },
-      {
-        "kind": "OBJECT",
-        "name": "UpdateAssemblyItemQuantityPayload",
-        "fields": [
-          {
-            "name": "assembly",
+            "name": "product",
             "type": {
               "kind": "OBJECT",
-              "name": "Assembly",
-              "ofType": null
-            },
-            "args": []
-          }
-        ],
-        "interfaces": []
-      },
-      {
-        "kind": "OBJECT",
-        "name": "UpdateProjectPayload",
-        "fields": [
-          {
-            "name": "project",
-            "type": {
-              "kind": "OBJECT",
-              "name": "Project",
+              "name": "Product",
               "ofType": null
             },
             "args": []
